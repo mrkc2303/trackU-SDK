@@ -10,7 +10,7 @@ class TrackingSDK {
     this.apiKey = apiKey;
     this.userId = null;
     this.userDetails = null;
-    this.endpoint = "http://localhost:5000/";
+    this.endpoint = "http://localhost:5050/submitEvent";
     this.sessionId = null;
     this.sessionStartTime = null;
     this.clicks = [];
