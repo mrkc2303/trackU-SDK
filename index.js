@@ -3,11 +3,15 @@ const { v4: uuidv4 } = require("uuid");
 require("dotenv").config();
 
 class TrackingSDK {
-  constructor(apiKey) {
+  constructor(apiKey, projectId) {
     if (!apiKey) {
-      throw new Error("UserId or ApiKey are required to initialize the SDK.");
+      throw new Error(
+        "projectId or ApiKey are required to initialize the SDK."
+      );
     }
+
     this.apiKey = apiKey;
+    this.projectId = projectId;
     this.userId = null;
     this.userDetails = null;
     this.endpoint = "http://localhost:5050/submitEvent";
@@ -25,6 +29,8 @@ class TrackingSDK {
     this.userDetails = userDetails;
     this.sessionId = uuidv4();
     this.sessionStartTime = new Date().toISOString();
+    console.log("userId", userId);
+    console.log("userDetails", userDetails);
     // api to store user initialisation
   }
 
