@@ -1,6 +1,5 @@
 const axios = require("axios");
 const { v4: uuidv4 } = require("uuid");
-require("dotenv").config();
 
 class TrackingSDK {
   constructor(apiKey, projectId) {
@@ -9,7 +8,6 @@ class TrackingSDK {
         "projectId or ApiKey are required to initialize the SDK."
       );
     }
-
     this.apiKey = apiKey;
     this.projectId = projectId;
     this.userId = null;
@@ -40,22 +38,42 @@ class TrackingSDK {
       throw new Error("Event name is required.");
     }
     try {
-      const response = await axios.post(
-        this.endpoint,
-        {
+      // const response = await axios.post(
+      //   this.endpoint,
+      //   {
+      //     userId: this.userId,
+      //     event: eventName,
+      //     data: eventData,
+      //     date: new Date().toISOString(),
+      //   },
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: `Bearer ${this.apiKey}`,
+      //     },
+      //   }
+      // );
+      // console.log("Event tracked successfully:", response.data);
+      const response = await fetch(this.endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.apiKey}`,
+        },
+        body: JSON.stringify({
           userId: this.userId,
           event: eventName,
           data: eventData,
           date: new Date().toISOString(),
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${this.apiKey}`,
-          },
-        }
-      );
-      console.log("Event tracked successfully:", response.data);
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      console.log("Event tracked successfully:", responseData);
     } catch (error) {
       console.error("Error tracking event:", error);
     }
@@ -74,7 +92,7 @@ class TrackingSDK {
   }
 
   // tracking page views and history
-  trackPageView() {
+  _trackPageView() {
     this._track("page_view", {
       url: window.location.href,
       title: document.title,
@@ -82,9 +100,9 @@ class TrackingSDK {
   }
 
   setupPageViewTracking() {
-    window.addEventListener("load", () => this.trackPageView());
-    window.addEventListener("popstate", () => this.trackPageView());
-    window.addEventListener("hashchange", () => this.trackPageView());
+    window.addEventListener("load", () => this._trackPageView());
+    window.addEventListener("popstate", () => this._trackPageView());
+    window.addEventListener("hashchange", () => this._trackPageView());
   }
 
   // tracking user interactions
@@ -159,6 +177,7 @@ class TrackingSDK {
         firstContentfulPaint:
           paintEntries.find((entry) => entry.name === "first-contentful-paint")
             ?.startTime || 0,
+        width: window.innerWidth,
         timestamp: new Date().toISOString(),
       };
 
