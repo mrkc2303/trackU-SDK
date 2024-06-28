@@ -10,26 +10,21 @@ class TrackingSDK {
     }
     this.apiKey = apiKey;
     this.projectId = projectId;
-    this.userId = null;
     this.userDetails = null;
     this.endpoint = "http://localhost:5050/submitEvent";
     this.sessionId = null;
+    this.userId = null;
     this.sessionStartTime = null;
     this.clicks = [];
     this.scrolls = [];
   }
   // setting user id
   async setUser(userId, userDetails = {}) {
-    if (!userId) {
-      throw new Error("User ID is required for initialisation.");
-    }
     this.userId = userId;
     this.userDetails = userDetails;
     this.sessionId = uuidv4();
     this.sessionStartTime = new Date().toISOString();
-    console.log("userId", userId);
     console.log("userDetails", userDetails);
-    // api to store user initialisation
   }
 
   // generic track event function
@@ -61,6 +56,7 @@ class TrackingSDK {
           Authorization: `Bearer ${this.apiKey}`,
         },
         body: JSON.stringify({
+          projectId: this.projectId,
           userId: this.userId,
           event: eventName,
           data: eventData,
@@ -96,7 +92,50 @@ class TrackingSDK {
     this._track("page_view", {
       url: window.location.href,
       title: document.title,
+      os: this._getOperatingSystem(),
+      browser: this._getBrowser(),
     });
+  }
+  _getOperatingSystem() {
+    const userAgent = window.navigator.userAgent;
+    let os = "Unknown OS";
+
+    if (/Macintosh|MacIntel|MacPPC|Mac68K/.test(userAgent)) {
+      os = "Mac OS";
+    } else if (/iPhone|iPad|iPod/.test(userAgent)) {
+      os = "iOS";
+    } else if (/Win32|Win64|Windows|WinCE/.test(userAgent)) {
+      os = "Windows";
+    } else if (/Android/.test(userAgent)) {
+      os = "Android";
+    } else if (/Linux/.test(userAgent)) {
+      os = "Linux";
+    }
+
+    return os;
+  }
+
+  _getBrowser() {
+    const userAgent = navigator.userAgent;
+    let browser = "Unknown Browser";
+
+    if (/Firefox/.test(userAgent)) {
+      browser = "Mozilla Firefox";
+    } else if (/SamsungBrowser/.test(userAgent)) {
+      browser = "Samsung Internet";
+    } else if (/Opera|OPR/.test(userAgent)) {
+      browser = "Opera";
+    } else if (/Trident/.test(userAgent)) {
+      browser = "Microsoft Internet Explorer";
+    } else if (/Edge/.test(userAgent)) {
+      browser = "Microsoft Edge";
+    } else if (/Chrome/.test(userAgent)) {
+      browser = "Google Chrome";
+    } else if (/Safari/.test(userAgent)) {
+      browser = "Safari";
+    }
+
+    return browser;
   }
 
   setupPageViewTracking() {
