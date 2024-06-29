@@ -11,7 +11,8 @@ class TrackingSDK {
     this.apiKey = apiKey;
     this.projectId = projectId;
     this.userDetails = null;
-    this.endpoint = "http://localhost:5050/submitEvent";
+    this.endpoint =
+      "https://purring-agency-slow.functions.on-fleek.app/submitEvent ";
     this.sessionId = null;
     this.userId = null;
     this.sessionStartTime = null;
@@ -33,22 +34,6 @@ class TrackingSDK {
       throw new Error("Event name is required.");
     }
     try {
-      // const response = await axios.post(
-      //   this.endpoint,
-      //   {
-      //     userId: this.userId,
-      //     event: eventName,
-      //     data: eventData,
-      //     date: new Date().toISOString(),
-      //   },
-      //   {
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Authorization: `Bearer ${this.apiKey}`,
-      //     },
-      //   }
-      // );
-      // console.log("Event tracked successfully:", response.data);
       const response = await fetch(this.endpoint, {
         method: "POST",
         headers: {
