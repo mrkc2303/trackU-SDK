@@ -2,7 +2,7 @@
 
 Link: https://www.npmjs.com/package/@mrkc2303/tracku-sdk
 
-<p align="center">
+<p>
 TrackU SDK is a cutting-edge analytics tool designed to track user activities across web3 and web2 applications seamlessly. Leveraging on-chain edge functions provided by Fleek, this SDK offers reduced latency, minimized overhead, auto-scaling capabilities, cost-effective pricing, and self-sovereignty. Our goal is to bridge the gap between web3 and web2 ecosystems, providing all applications with the robust benefits of web3 infrastructure. <br> <br>
 By providing a comprehensive, secure, and scalable solution, we empower developers and businesses to leverage the full potential of web3 infrastructure while gaining invaluable insights into their user base. Join us in bringing the future of analytics to the present, and enjoy the myriad benefits that TrackU offers.
 <br> <br>
